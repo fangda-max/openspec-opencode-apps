@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riddle Guessing Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .score-panel {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .score-item {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .score-value {
+            font-size: 18px;
+            margin-left: 5px;
+        }
+
+        .difficulty-indicator {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .riddle-container {
+            padding: 30px 20px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .riddle-box {
+            border: 2px solid #dfe6e9;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .riddle-box.solved {
+            border-color: #00b894;
+            background: #f0fff4;
+        }
+
+        .riddle-number {
+            font-size: 12px;
+            color: #636e72;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .riddle-text {
+            font-size: 20px;
+            color: #2d3436;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .hint-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px dashed #dfe6e9;
+        }
+
+        .hint-display {
+            background: #ffeaa7;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #634200;
+            line-height: 1.4;
+        }
+
+        .answer-display {
+            background: #55efc4;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            text-align: center;
+            font-size: 16px;
+            color: #00695c;
+        }
+
+        .answer-display strong {
+            display: block;
+            font-size: 20px;
+            margin-top: 8px;
+        }
+
+        .input-section {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .answer-input {
+            flex: 1;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid #dfe6e9;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .answer-input:focus {
+            border-color: #0984e3;
+        }
+
+        .answer-input.error {
+            border-color: #e74c3c;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .btn {
+            padding: 14px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #0984e3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0870c0;
+        }
+
+        .btn-primary:disabled {
+            background: #b2bec3;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #636e72;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2d3436;
+        }
+
+        .btn-hint {
+            background: transparent;
+            color: #fdcb6e;
+            border: 2px solid #fdcb6e;
+        }
+
+        .btn-hint:hover:not(:disabled) {
+            background: #fdcb6e;
+            color: #634200;
+        }
+
+        .btn-hint:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .hint-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .feedback-message {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .feedback-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .feedback-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .restart-section {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .restart-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .restart-btn:hover {
+            background: #c0392b;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal h2 {
+            color: #2d3436;
+            margin-bottom: 16px;
+        }
+
+        .modal p {
+            color: #636e72;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .locked-difficulty {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .lock-icon {
+            margin-right: 5px;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+
+            .game-container {
+                border-radius: 12px;
+            }
+
+            .score-panel {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .riddle-container {
+                padding: 20px 16px;
+            }
+
+            .riddle-text {
+                font-size: 18px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                padding: 12px 20px;
+            }
+
+            .hint-buttons {
+                flex-direction: column;
+            }
+
+            .btn-hint {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="score-panel">
+            <div class="score-item">Score: <span class="score-value" id="current-score">0</span></div>
+            <div class="score-item">High Score: <span class="score-value" id="high-score">0</span></div>
+            <div class="difficulty-indicator" id="difficulty-indicator">Easy</div>
+        </div>
+
+        <div class="riddle-container">
+            <div class="riddle-box" id="riddle-box">
+                <div class="riddle-number" id="riddle-number">Riddle 1 of ?</div>
+                <div class="riddle-text" id="riddle-text">Loading...</div>
+                <div class="hint-section" id="hint-section">
+                    <div class="hints-available" id="hints-available"></div>
+                    <div class="hints-used" id="hints-used"></div>
+                </div>
+                <div class="answer-display hidden" id="answer-display">
+                    Answer: <strong id="answer-text"></strong>
+                </div>
+            </div>
+            <div class="feedback-message hidden" id="feedback"></div>
+        </div>
+
+        <div class="input-section">
+            <div class="hint-buttons" id="hint-buttons">
+                <button class="btn btn-hint" id="hint-1-btn">Get Hint 1</button>
+                <button class="btn btn-hint" id="hint-2-btn" disabled>Get Hint 2</button>
+            </div>
+            <div class="input-group">
+                <input type="text" class="answer-input" id="answer-input" placeholder="Enter your answer..." autocomplete="off">
+                <button class="btn btn-primary" id="submit-btn">Submit</button>
+            </div>
+        </div>
+
+        <div class="restart-section">
+            <button class="btn restart-btn" id="restart-btn">Restart Game</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="restart-modal">
+        <div class="modal">
+            <h2>Restart Game?</h2>
+            <p>This will reset your current session score but keep your high score and progress.</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" id="cancel-restart">Cancel</button>
+                <button class="btn btn-primary" id="confirm-restart">Restart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const riddles = [
+            // Easy (3 riddles)
+            {
+                question: "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?",
+                answer: "map",
+                difficulty: "easy",
+                category: "classic",
+                hints: ["Something you use for navigation", "You hold it when traveling"]
+            },
+            {
+                question: "What goes up but never comes down?",
+                answer: "age",
+                difficulty: "easy",
+                category: "wordplay",
+                hints: ["It increases every year", "Something related to time and living"]
+            },
+            {
+                question: "What has hands but cannot clap?",
+                answer: "clock",
+                difficulty: "easy",
+                category: "classic",
+                hints: ["You check it frequently", "It tells you when it's time for something"]
+            },
+            // Medium (5 riddles)
+            {
+                question: "What can you break, even if you never touch it?",
+                answer: "promise",
+                difficulty: "medium",
+                category: "wordplay",
+                hints: ["It's something people make between each other", "Breaking it causes disappointment"]
+            },
+            {
+                question: "The more you take, the more you leave behind. What am I?",
+                answer: "footsteps",
+                difficulty: "medium",
+                category: "lateral-thinking",
+                hints: ["They follow where you walk", "They're visible on ground after rain"]
+            },
+            {
+                question: "What has keys but can't open locks?",
+                answer: "piano",
+                difficulty: "medium",
+                category: "wordplay",
+                hints: ["You play music on it", "It has black and white parts"]
+            },
+            {
+                question: "I'm not alive, but I grow; I don't have lungs, but I need air; I don't have a mouth, but water kills me. What am I?",
+                answer: "fire",
+                difficulty: "medium",
+                category: "science",
+                hints: ["It's hot and dangerous", "It dances and flickers"]
+            },
+            {
+                question: "What is always coming but never arrives?",
+                answer: "tomorrow",
+                difficulty: "medium",
+                category: "classic",
+                hints: ["It's a day of the week", "We always plan for it"]
+            },
+            // Hard (7 riddles)
+            {
+                question: "What belongs to you, but others use it more than you do?",
+                answer: "name",
+                difficulty: "hard",
+                category: "wordplay",
+                hints: ["People call it out", "It's what others address you by"]
+            },
+            {
+                question: "Forward I'm heavy, backward I'm not. What am I?",
+                answer: "ton",
+                difficulty: "hard",
+                category: "wordplay",
+                hints: ["It's reversed to change meaning", "Think about spelling"]
+            },
+            {
+                question: "What can travel around the world while staying in a corner?",
+                answer: "stamp",
+                difficulty: "hard",
+                category: "lateral-thinking",
+                hints: ["It goes on mail", "It has colorful designs"]
+            },
+            {
+                question: "A man who was outside in the rain without an umbrella or hat didn't get a single hair on his head wet. How",
+                answer: "happened? he was bald",
+                correctAnswers: ["he was bald", "bald", "because he was bald"],
+                difficulty: "hard",
+                category: "lateral-thinking",
+                hints: ["The man had no hair", "Think physically about his head"]
+            },
+            {
+                question: "What gets smaller when you turn it upside down?",
+                answer: "six",
+                difficulty: "hard",
+                category: "wordplay",
+                hints: ["It's actually a number written as a word", "Turn it literally upside down"]
+            },
+            {
+                question: "I have no life, but I can die. What am I?",
+                answer: "battery",
+                difficulty: "hard",
+                category: "science",
+                hints: ["It powers your devices", "When dead, needs replacing"]
+            },
+            {
+                question: "What has many words but never speaks?",
+                answer: "book",
+                difficulty: "hard",
+                category: "classic",
+                hints: ["You read it for knowledge", "It has pages you turn"]
+            }
+        ];
+
+        const gameState = {
+            currentRiddle: null,
+            score: 0,
+            hintsUsed: 0,
+            usedRiddles: [],
+            highScores: {
+                easy: 0,
+                medium: 0,
+                hard: 0
+            },
+            unlockedDifficulty: 'easy'
+        };
+
+        const ELEMENTS = {
+            currentScore: document.getElementById('current-score'),
+            highScore: document.getElementById('high-score'),
+            difficultyIndicator: document.getElementById('difficulty-indicator'),
+            riddleNumber: document.getElementById('riddle-number'),
+            riddleText: document.getElementById('riddle-text'),
+            hintSection: document.getElementById('hint-section'),
+            hintsAvailable: document.getElementById('hints-available'),
+            hintsUsed: document.getElementById('hints-used'),
+            answerDisplay: document.getElementById('answer-display'),
+            answerText: document.getElementById('answer-text'),
+            hintBtn1: document.getElementById('hint-1-btn'),
+            hintBtn2: document.getElementById('hint-2-btn'),
+            answerInput: document.getElementById('answer-input'),
+            submitBtn: document.getElementById('submit-btn'),
+            feedback: document.getElementById('feedback'),
+            restartModal: document.getElementById('restart-modal'),
+            restartBtn: document.getElementById('restart-btn'),
+            confirmRestart: document.getElementById('confirm-restart'),
+            cancelRestart: document.getElementById('cancel-restart'),
+            riddleBox: document.getElementById('riddle-box')
+        };
+
+        function init() {
+            loadPersistence();
+            selectNewRiddle();
+            updateUI();
+            setupEventListeners();
+        }
+
+        function loadPersistence() {
+            const saved = localStorage.getItem('riddleGameHighScores');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                gameState.highScores.easy = parsed.easy || 0;
+                gameState.highScores.medium = parsed.medium || 0;
+                gameState.highScores.hard = parsed.hard || 0;
+                
+                const totalLifeScore = gameState.highScores.easy + 
+                                      gameState.highScores.medium + 
+                                      gameState.highScores.hard;
+                
+                if (totalLifeScore >= 100) {
+                    gameState.unlockedDifficulty = 'hard';
+                } else if (totalLifeScore >= 50) {
+                    gameState.unlockedDifficulty = 'medium';
+                }
+            }
+        }
+
+        function savePersistence() {
+            localStorage.setItem('riddleGameHighScores', JSON.stringify(gameState.highScores));
+        }
+
+        function getAvailableRiddles() {
+            return riddles.filter(r => {
+                if (gameState.usedRiddles.includes(r)) return false;
+                const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
+                const playerLevel = difficultyOrder[gameState.unlockedDifficulty];
+                const riddleLevel = difficultyOrder[r.difficulty];
+                return riddleLevel <= playerLevel;
+            });
+        }
+
+        function selectNewRiddle() {
+            const available = getAvailableRiddles();
+            if (available.length === 0) {
+                endSessionAllSolved();
+                return;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * available.length);
+            gameState.currentRiddle = available[randomIndex];
+            gameState.usedRiddles.push(gameState.currentRiddle);
+            gameState.hintsUsed = 0;
+            gameState.score = 0;
+        }
+
+        function endSessionAllSolved() {
+            const total = gameState.highScores[gameState.unlockedDifficulty] + gameState.score;
+            if (total > gameState.highScores[gameState.unlockedDifficulty]) {
+                gameState.highScores[gameState.unlockedDifficulty] = total;
+                savePersistence();
+            }
+            showFeedback('All riddles solved! Restarting with new selection.', 'success');
+            setTimeout(() => {
+                gameState.usedRiddles = [];
+                selectNewRiddle();
+                updateUI();
+            }, 3000);
+        }
+
+        function calculateScore() {
+            const basePoints = { easy: 10, medium: 15, hard: 20 };
+            const base = basePoints[gameState.currentRiddle.difficulty];
+            return base - gameState.hintsUsed;
+        }
+
+        function revealHint(hintNumber) {
+            if (!gameState.currentRiddle || gameState.hintsUsed >= hintNumber || gameState.currentRiddle.answersAnswered) {
+                return;
+            }
+            gameState.hintsUsed++;
+            renderHints();
+            updateUI();
+        }
+
+        function submitAnswer() {
+            const input = ELEMENTS.answerInput.value.trim().toLowerCase();
+            if (!input) {
+                showError();
+                return;
+            }
+
+            const current = gameState.currentRiddle;
+            let isValid = false;
+            
+            if (Array.isArray(current.correctAnswers)) {
+                isValid = current.correctAnswers.some(ans => ans.toLowerCase() === input);
+            } else {
+                isValid = current.answer.toLowerCase() === input;
+            }
+
+            if (isValid && !current.anwered) {
+                const pointsEarned = calculateScore();
+                gameState.score += pointsEarned;
+                
+                if (gameState.score < 0) gameState.score = 0;
+                
+                if (gameState.score > gameState.highScores[current.difficulty]) {
+                    gameState.highScores[current.difficulty] = gameState.score;
+                    savePersistence();
+                }
+
+                current.answered = true;
+                showSuccess(input);
+            } else {
+                showError();
+            }
+            
+            updateUI();
+        }
+
+        function showSuccess(answer) {
+            ELEMENTS.answerDisplay.classList.remove('hidden');
+            ELEMENTS.answerText.textContent = answer;
+            ELEMENTS.riddleBox.classList.add('solved');
+            ELEMENTS.hintSection.classList.add('hidden');
+            ELEMENTS.submitBtn.disabled = true;
+            ELEMENTS.hintBtn1.disabled = true;
+            ELEMENTS.hintBtn2.disabled = true;
+            ELEMENTS.answerInput.disabled = true;
+        }
+
+        function showError() {
+            ELEMENTS.answerInput.classList.add('error');
+            ELEMENTS.feedback.textContent = 'Incorrect, try again!';
+            ELEMENTS.feedback.className = 'feedback-message feedback-error hidden';
+            ELEMENTS.feedback.classList.remove('hidden');
+            setTimeout(() => {
+                ELEMENTS.answerInput.classList.remove('error');
+            }, 300);
+        }
+
+        function showFeedback(message, type) {
+            ELEMENTS.feedback.textContent = message;
+            ELEMENTS.feedback.className = `feedback-message feedback-${type} hidden`;
+            ELEMENTS.feedback.classList.remove('hidden');
+            setTimeout(() => {
+                ELEMENTS.feedback.classList.add('hidden');
+            }, 3000);
+        }
+
+        function showModal() {
+            ELEMENTS.restartModal.classList.add('active');
+        }
+
+        function hideModal() {
+            ELEMENTS.restartModal.classList.remove('active');
+        }
+
+        function startNewGame() {
+            gameState.score = 0;
+            gameState.usedRiddles = [];
+            gameState.hintsUsed = 0;
+            
+            if (riddles.every(r => gameState.usedRiddles.includes(r))) {
+                gameState.usedRiddles = [];
+            }
+            
+            selectNewRiddle();
+            updateUI();
+            hideModal();
+        }
+
+        function setupEventListeners() {
+            ELEMENTS.submitBtn.addEventListener('click', submitAnswer);
+            ELEMENTS.answerInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') submitAnswer();
+            });
+            ELEMENTS.hintBtn1.addEventListener('click', () => revealHint(1));
+            ELEMENTS.hintBtn2.addEventListener('click', () => revealHint(2));
+            ELEMENTS.restartBtn.addEventListener('click', showModal);
+            ELEMENTS.confirmRestart.addEventListener('click', startNewGame);
+            ELEMENTS.cancelRestart.addEventListener('click', hideModal);
+        }
+
+        function renderHints() {
+            const current = gameState.currentRiddle;
+            if (!current) return;
+            
+            let available = '';
+            let used = '';
+            
+            if (gameState.hintsUsed >= 1) {
+                used += `<div class="hint-display">${current.hints[0]}</div>`;
+            } else {
+                available += '<button class="btn btn-hint" id="hint-1-btn">Get Hint 1</button>';
+            }
+            
+            if (gameState.hintsUsed >= 2) {
+                used += `<div class="hint-display">${current.hints[1]}</div>`;
+            } else if (gameState.hintsUsed === 1) {
+                available += '<button class="btn btn-hint" id="hint-2-btn">Get Hint 2</button>';
+            }
+            
+            available = available.replace('id="hint-', `data-hint-id="`);
+        }
+
+        function updateUI() {
+            const current = gameState.currentRiddle;
+            
+            ELEMENTS.currentScore.textContent = gameState.score;
+            ELEMENTS.highScore.textContent = Math.max(
+                gameState.highScores.easy,
+                gameState.highScores.medium,
+                gameState.highScores.hard
+            );
+            
+            ELEMENTS.difficultyIndicator.textContent = 
+                gameState.unlockedDifficulty.charAt(0).toUpperCase() + 
+                gameState.unlockedDifficulty.slice(1);
+            
+            if (current) {
+                const remaining = getAvailableRiddles().length;
+                ELEMENTS.riddleNumber.textContent = `Riddle (${remaining} left)`;
+                ELEMENTS.riddleText.textContent = current.question;
+            }
+            
+            renderHints();
+        }
+
+        init();
+    </script>
+</body>
+</html>
