@@ -1,0 +1,308 @@
+/* ==========================================
+   SKEUOMORPHIC TODO LIST - MAIN STYLES
+   Designed with realistic textures and depth
+   ========================================== */
+
+/* CSS Variables for consistent theming */
+:root {
+    /* Base colors - warm, inviting palette */
+    --color-bg-primary: #f5f0e6;
+    --color-bg-secondary: #e8dcc8;
+    --color-bg-surface: #faf6ed;
+    
+    /* Accent colors */
+    --color-primary: #4a90a4;
+    --color-primary-dark: #3a7a8e;
+    --color-primary-light: #5aa3b8;
+    --color-accent: #d4a574;
+    --color-accent-dark: #c49564;
+    
+    /* Success/Completion */
+    --color-success: #7cb342;
+    --color-success-dark: #689f38;
+    
+    /* Text colors */
+    --color-text-primary: #2c2c2c;
+    --color-text-secondary: #5a5a5a;
+    --color-text-muted: #8a8a8a;
+    
+    /* Shadows - layered for realistic depth */
+    --shadow-sm: 2px 2px 4px rgba(0, 0, 0, 0.12);
+    --shadow-md: 4px 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 6px 6px 12px rgba(0, 0, 0, 0.18);
+    --shadow-inset: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+    
+    /* Border radius - soft but defined */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease-out;
+    --transition-normal: 250ms ease-out;
+}
+
+/* Reset & Base Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--color-bg-primary);
+    background-image: 
+        radial-gradient(circle at 50% 0%, var(--color-bg-secondary) 0%, transparent 70%),
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 20px,
+            rgba(0, 0, 0, 0.02) 20px,
+            rgba(0, 0, 0, 0.02) 21px
+        );
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* App Container */
+.app-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 30px;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Paper-like texture effect */
+.app-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    border-radius: var(--radius-lg);
+}
+
+/* Header Styles */
+.app-header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.app-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-shadow: 
+        1px 1px 0 rgba(255, 255, 255, 0.8),
+        2px 2px 0 rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+}
+
+.task-counter {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-secondary);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    display: inline-block;
+    box-shadow: var(--shadow-sm);
+    font-weight: 500;
+}
+
+/* Form Styles */
+.todo-form {
+    margin-bottom: 30px;
+    z-index: 1;
+    position: relative;
+}
+
+.input-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+}
+
+.todo-input {
+    flex: 1;
+    padding: 16px 20px;
+    font-size: 1rem;
+    border: 2px solid var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    background: #fff;
+    box-shadow: 
+        var(--shadow-inset),
+        var(--shadow-sm);
+    transition: all var(--transition-fast);
+    color: var(--color-text-primary);
+}
+
+.todo-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 
+        0 0 0 3px rgba(74, 144, 164, 0.2),
+        var(--shadow-inset),
+        var(--shadow-md);
+}
+
+.todo-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+/* Button Base Styles - Skeuomorphic */
+.btn {
+    padding: 16px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-inset);
+}
+
+/* Primary Button */
+.btn-primary {
+    background: linear-gradient(
+        180deg,
+        var(--color-primary-light) 0%,
+        var(--color-primary) 50%,
+        var(--color-primary-dark) 51%,
+        var(--color-primary) 100%
+    );
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(
+        180deg,
+        var(--color-primary) 0%,
+        var(--color-primary-dark) 50%,
+        var(--color-primary) 51%,
+        var(--color-primary-dark) 100%
+    );
+}
+
+/* Main Content Section */
+.app-main {
+    z-index: 1;
+    position: relative;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+    padding-left: 12px;
+    border-left: 4px solid var(--color-primary);
+}
+
+/* Todo List */
+.todo-list {
+    min-height: 200px;
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-bg-secondary);
+    box-shadow: var(--shadow-inset);
+    padding: 16px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--color-text-muted);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+    display: block;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* Footer */
+.app-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--color-bg-secondary);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+}
+
+.app-footer .heart {
+    display: inline-block;
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .app-container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .app-title {
+        font-size: 2rem;
+    }
+    
+    .input-wrapper {
+        flex-direction: column;
+    }
+    
+    .btn-primary {
+        padding: 14px 20px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .app-container {
+        box-shadow: none;
+        border: none;
+    }
+    
+    .btn {
+        display: none;
+    }
+}

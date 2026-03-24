@@ -1,0 +1,225 @@
+# Project Constitution: Skeuomorphic Todo List
+
+## 0. Executive Summary
+
+This document establishes the governing principles, quality standards, and operational guidelines for the development of a skeuomorphic-style Todo List application. All contributors (including AI agents) must adhere to these principles.
+
+**Core Philosophy:** Specifications drive development. Every feature begins with clear requirements before any code is written.
+
+---
+
+## 1. Language Protocol
+
+### Primary Language Rules
+- **User → AI**: Chinese
+- **AI → User**: Translate results back to Chinese
+- **Code/Comments**: English only
+- **Documentation**: English primary, optional Chinese annotations for complex sections
+
+### Communication Guidelines
+When communicating with the user:
+1. Acknowledge in Chinese
+2. Execute work with English context
+3. Report results in Chinese
+
+---
+
+## 2. Technical Standards
+
+### Core Stack
+- **HTML5**: Semantic markup with ARIA labels for accessibility
+- **CSS3**: Vanilla CSS with custom properties (variables), no preprocessors
+- **JavaScript**: ES6+ modules, vanilla JS only, no frameworks or libraries
+- **Storage**: Browser localStorage API for data persistence
+
+### File Structure Requirements
+```
+project-root/
+├── index.html          # Main entry point
+├── css/
+│   └── styles.css      # All styling (single file for simplicity)
+├── js/
+│   ├── main.js         # Application entry
+│   ├── app.js          # Core app logic
+│   ├── todo.js         # Todo item management
+│   └── storage.js      # LocalStorage abstraction
+└── assets/             # Images, textures if needed
+```
+
+### Code Quality Standards
+1. **Naming Conventions**: 
+   - Files: lowercase with hyphens (todo-list.js)
+   - Variables: camelCase
+   - Constants: UPPER_SNAKE_CASE
+   - Classes: PascalCase
+
+2. **Comments**: 
+   - Explain "why", not "what"
+   - JSDoc for public functions
+   - No commented-out code
+
+3. **Error Handling**: 
+   - Graceful degradation
+   - User-friendly error messages
+   - No console.log() in production builds
+
+4. **Performance**: 
+   - Debounce input handlers
+   - Minimal DOM manipulations
+   - Lazy-load non-critical resources
+
+---
+
+## 3. Design Principles: Skeuomorphism
+
+### Core Aesthetic Goals
+Every UI element should feel **tactile**, **physical**, and **realistic**. The interface should resemble physical objects you can interact with.
+
+### Visual Elements
+
+#### Shadows & Depth
+- Use layered box-shadows for realistic depth
+- Elevation changes on hover/click states
+- Consistent light source (top-left at 45° angle)
+
+#### Textures & Materials
+- Subtle gradients mimicking real materials (plastic, wood, paper)
+- Noise patterns where appropriate (paper backgrounds)
+- Beveled edges for buttons and containers
+
+#### Button States
+**Normal**: Raised appearance with highlight on top/left, shadow on bottom/right
+**Hover**: Slightly elevated, brighter highlight
+**Active (Pressed)**: Inset shadow effect, darker tones, simulates physical depression
+**Disabled**: Flat appearance, muted colors, no shadow
+
+#### Typography
+- Clean, legible sans-serif fonts (system fonts preferred)
+- Subtle text shadows for embossed effects
+- Appropriate letter-spacing for readability
+
+### Color Palette
+**Warm, inviting tones inspired by physical office supplies:**
+- Backgrounds: Soft creams/beiges (#f5f0e6 base)
+- Accents: Warm blues, greens, oranges
+- Text: Dark grays (#333) rather than pure black
+- Highlights: Golden yellows for active states
+
+### Animation Guidelines
+- Duration: 150-300ms for micro-interactions
+- Timing functions: ease-out for natural feel
+- Purpose: Enhance realism, not just decoration
+- Examples: Button press animation, list item sliding in/out
+
+---
+
+## 4. Feature Specification Process
+
+### Step 1: /speckit.specify
+Define requirements clearly:
+- User stories in format: "As a [user], I want to [action] so that [benefit]"
+- Acceptance criteria as bullet points
+- Non-functional requirements (performance, accessibility)
+
+### Step 2: /speckit.clarify (Optional)
+Ask clarifying questions about underspecified areas before planning.
+
+### Step 3: /speckit.plan
+Create technical plan:
+- Architecture diagram description
+- Component breakdown
+- Data models
+- API/storage contracts
+
+### Step 4: /speckit.tasks
+Generate task list:
+- Numbered tasks with priority
+- Estimated complexity
+- Dependencies between tasks
+
+### Step 5: /speckit.implement
+Execute tasks sequentially:
+- Complete one task at a time
+- Verify functionality before moving on
+- Update documentation as you go
+
+---
+
+## 5. Testing Protocol
+
+### Manual Testing Checklist
+Before marking a feature complete:
+- [ ] Functionality works in Chrome (latest)
+- [ ] Functionality works in Firefox (latest)
+- [ ] Mobile view responsive (minimum check)
+- [ ] Edge cases handled (empty state, error state)
+- [ ] Accessibility basics (tab navigation, screen reader labels)
+- [ ] Performance acceptable (<500ms for common actions)
+
+### Regression Prevention
+After each major change:
+- Re-test all previously completed features
+- Document any breaking changes
+- Update constitution if new requirements emerge
+
+---
+
+## 6. Version Control Guidelines
+
+### Branch Strategy
+- `main`: Production-ready code
+- `feature/*`: Individual features from `/speckit.tasks`
+- Naming: `feature/description-number` (e.g., `feature/add-due-date-001`)
+
+### Commit Messages
+Format: `[spec-kit] Brief description following task from /speckit.tasks`
+Examples:
+```
+[speckit] Implement todo creation form - Task 001
+[speckit] Add skeuomorphic button styles - Task 003
+```
+
+---
+
+## 7. Configuration Management
+
+### Environment Variables
+None required for local development. All configuration inline or in constants.
+
+### Build Process
+No build process required. Direct browser loading.
+
+### Deployment Considerations
+Static files can be deployed to any static hosting:
+- GitHub Pages
+- Netlify
+- Vercel
+- Any HTTP server
+
+---
+
+## 8. Emergency Procedures
+
+### If Development Deviates from Plan
+1. Pause implementation
+2. Call `/speckit.clarify` to reconcile expectations
+3. Update `/speckit.plan` if necessary
+4. Resume from last completed task
+
+### If Quality Standards Slip
+1. Review relevant sections of this constitution
+2. Refactor affected code before continuing
+3. Document lessons learned
+
+---
+
+## 9. Amendment Process
+
+To update this constitution:
+1. Call `/speckit.constitution` with specific changes requested
+2. Review proposed amendments
+3. Approve updates explicitly
+4. All future work follows updated version
+
+**Last Updated**: Project initialization
+**Version**: 1.0.0

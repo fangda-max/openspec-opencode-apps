@@ -1,0 +1,98 @@
+/* Event Styling - Month View */
+
+.event-item-preview {
+    font-size: var(--font-size-xs);
+    padding: 2px 6px;
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    border-radius: var(--border-radius-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    cursor: pointer;
+    border-left: 2px solid var(--color-primary);
+}
+
+.event-item-preview:hover {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.event-item-preview.multi-event {
+    font-style: italic;
+}
+
+/* Week/Day View Events */
+
+.event-block {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: var(--border-radius-sm);
+    padding: 4px 8px;
+    overflow: hidden;
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    border-left: 3px solid transparent;
+}
+
+.event-block:hover {
+    opacity: 0.9;
+    z-index: 100;
+}
+
+/* Event Color Variations (for categorization) */
+
+.event-block.task {
+    background-color: #5f9ea0;
+    border-left-color: #4a7a7c;
+}
+
+.eventBlock.meeting {
+    background-color: #9370db;
+    border-left-color: #7b61bb;
+}
+
+.eventBlock.personal {
+    background-color: #ff6b6b;
+    border-left-color: #e65a5a;
+}
+
+.eventBlock.other {
+    background-color: #ffa500;
+    border-left-color: #e69400;
+}
+
+/* Multi-day events indicator */
+
+.event-block.multi-day {
+    padding: 4px;
+}
+
+.event-block.multi-day .event-title {
+    display: block;
+}
+
+/* Event Overflow Indicator */
+
+.events-count {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--color-text);
+    font-weight: 600;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: var(--font-size-xs);
+    margin-left: 4px;
+}
+
+=== End of File ===
